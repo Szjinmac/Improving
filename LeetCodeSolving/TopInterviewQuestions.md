@@ -136,3 +136,46 @@ def romanToInt(self, s: str) -> int:
         return number
 ```
 
+
+
+## 14.Longest Common Prefix		Easy
+
+```java
+public String longestCommonPrefix(String[] strs) {
+        if(strs.length == 0){
+            return "";
+        }
+				//先把数组的第一个字符串当作结果，如果不存在就去掉结果的最后一个字符接着循环
+        String prefix = strs[0];
+        for(int i=1;i<strs.length;i++){
+            while(strs[i].indexOf(prefix)!=0){
+                prefix = prefix.substring(0,prefix.length()-1);
+              	if (prefix.isEmpty()) return "";
+            }
+        }
+
+        return prefix;
+        
+    }
+
+//时间复杂度 o(n)
+//空间复杂度 o(1)
+```
+
+
+
+### python
+
+```python
+class Solution:
+    def longestCommonPrefix(self, strs: List[str]) -> str: # strs = ["flower","flow","flight"]
+        short = min(strs, key=len) # short = "flow"
+        for item in strs: # When item = "flight"
+            while len(short) > 0:
+                if item.startswith(short): # during loop 1 condition fails, during loop 2 condition fails, during loop 3 "flight" startswith fl is True
+                    break
+                else:
+                    short = short[:-1] # during loop 1 short = flo, during loop 2 short = fl
+        return short
+```
+
