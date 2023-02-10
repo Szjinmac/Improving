@@ -179,3 +179,49 @@ class Solution:
         return short
 ```
 
+
+
+## 35.Search Insert Position
+
+### 暴力解法
+
+```java
+class Solution {
+    public int searchInsert(int[] nums, int target) {
+        for(int i=0;i<nums.length;i++){
+            if(nums[i]==target || nums[i]>target){
+                return i;
+            }
+        }
+
+        return nums.length;
+    }
+
+}
+
+//时间复杂度 o(n)
+//空间复杂度 o(1)
+```
+
+
+
+### 二分法
+
+```java
+class Solution {
+    public int searchInsert(int[] nums, int target) {
+         int lo = 0, hi = nums.length - 1;
+
+        while (lo <= hi) {
+            int mid = lo + (hi - lo) / 2;
+
+            if (target < nums[mid]) hi = mid - 1;
+            else if (target > nums[mid]) lo = mid + 1;
+            else return mid;
+        }
+
+        return lo;
+    }
+}
+```
+
