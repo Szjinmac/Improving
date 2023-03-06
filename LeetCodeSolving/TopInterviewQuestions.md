@@ -545,3 +545,94 @@ class Solution {
 }
 ```
 
+
+
+## 二分法查找算法中的应用范围
+
+### 在有序数组中进行查找一个数(二分下标)
+
+数组具有随机访问的特性，由于数组在内存中==连续存放==，因此我们可以通过数组的下标快速地访问到这个元素。如果数组存放在链表中，访问一个元素我们都得通过遍历，有遍历的功夫我们早就找到了这个元素，因此，在链表中不适合使用二分法。
+
+### 在整数范围内查找一个整数(二分答案)
+
+如果我们要找的是一个整数，并且我们知道这个整数的范围，那么我们就可以使用二分查找算法，逐渐缩小整数的范围。
+
+### 二分法的两种思路
+
+1. 在循环体中查找元素
+2. 在循环体中排除目标元素一定不存在发区间
+
+#### 循环可以继续的条件
+
+`while(left<=right)`表示在区间里只剩下一个元素的时候，我们还需要继续查找
+
+#### 取中间数的代码
+
+取中间数的代码`int mid=(left+right)/2`,严格意义上是有bug的，这是因为在left和right很大的时候，`left+right`有可能会发在整形溢出，这个时候推荐的写法是：
+
+`int mid=left + (right-left)/2 `
+
+
+
+
+
+## 704.Binary Search    Easy [数组] [二分查找]
+
+```java
+class Solution {
+    public int search(int[] nums, int target) {
+        int left = 0;
+        int right = nums.length -1 ;
+
+        while(left<=right){
+            int mid = left+(right-left)/2;
+            if(nums[mid]==target){
+                return mid;
+            }else if(nums[mid]>target){
+                right = mid-1;
+            }else{
+                left = mid+1;
+            }
+        }   
+
+        return -1;
+    }
+}
+```
+
+
+
+## 374.Guess Number Higher or Lower ==Easy== [数组] [二分法]
+
+```java
+/** 
+ * Forward declaration of guess API.
+ * @param  num   your guess
+ * @return 	     -1 if num is higher than the picked number
+ *			      1 if num is lower than the picked number
+ *               otherwise return 0
+ * int guess(int num);
+ */
+
+public class Solution extends GuessGame {
+    public int guessNumber(int n) {
+        int left = 1;
+        int right = n;
+
+        while(left<=right){
+            int mid = left+(right-left)/2;
+            if(guess(mid)==0){
+                return mid;
+            }
+            else if(guess(mid)==-1){
+                right = mid-1; 
+            }else{
+                left = mid+1;
+            }
+        }
+
+        return -1;
+    }
+}
+```
+
