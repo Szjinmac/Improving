@@ -574,7 +574,9 @@ class Solution {
 
 
 
+### 二分法另外一种思路
 
+在循环体中排除目标元素一定不存在的区间。`while left<right`表示当`left=right`时退出循环。注意使用这个思路需要向上取整数，`int mid = left + (rignt-left+1)/2`,否则可能出现死循环。
 
 ## 704.Binary Search    Easy [数组] [二分查找]
 
@@ -598,6 +600,62 @@ class Solution {
         return -1;
     }
 }
+
+public class Solution {
+  
+    // 「力扣」第 704 题：二分查找
+
+    public int search(int[] nums, int target) {
+        int len = nums.length;
+
+        int left = 0;
+        int right = len - 1;
+        // 目标元素可能存在在区间 [left, right]
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] < target) {
+                // 下一轮搜索区间是 [mid + 1, right]
+                left = mid + 1;
+            } else {
+                // 下一轮搜索区间是 [left, mid]
+                right = mid;
+            }
+        }
+
+        if (nums[left] == target) {
+            return left;
+        }
+        return -1;
+    }
+}
+
+public class Solution {
+  
+    // 「力扣」第 704 题：二分查找
+
+    public int search(int[] nums, int target) {
+        int len = nums.length;
+
+        int left = 0;
+        int right = len - 1;
+        while (left < right) {
+            int mid = left + (right - left + 1) / 2;
+            if (nums[mid] > target) {
+                // 下一轮搜索区间是 [left, mid - 1]
+                right = mid - 1;
+            } else {
+                // 下一轮搜索区间是 [mid, right]
+                left = mid;
+            }
+        }
+
+        if (nums[left] == target) {
+            return left;
+        }
+        return -1;
+    }
+}
+
 ```
 
 
@@ -634,5 +692,44 @@ public class Solution extends GuessGame {
         return -1;
     }
 }
+```
+
+
+
+## 35.Search Insert Position  ==Medium== [二分法]
+
+```java
+public class Solution {
+
+    public int searchInsert(int[] nums, int target) {
+        int len = nums.length;
+        // 题目没有说输入数组的长度可能为 0，因此需要做特殊判断
+        if (len == 0) {
+            return 0;
+        }
+
+        if (nums[len - 1] < target) {
+            return len;
+        }
+        int left = 0;
+        int right = len - 1;
+
+        // 在区间 [left, right] 查找插入元素的位置
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] < target){
+                // 下一轮搜索的区间是 [mid + 1, right]
+                left = mid + 1;
+            } else {
+                // 下一轮搜索的区间是 [left, mid]
+                right = mid;
+            }
+        }
+        // 由于程序走到这里 [left, right] 里一定存在插入元素的位置
+        // 且退出循环的时候一定有 left == right 成立，因此返回 left 或者 right 均可
+        return left;
+    }
+}
+
 ```
 
