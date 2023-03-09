@@ -733,3 +733,120 @@ public class Solution {
 
 ```
 
+
+
+## 34. Find First and Last Position of Element in Sorted Array   ==Medium== [二分法放弃]
+
+```java
+class Solution {
+    public int[] searchRange(int[] nums, int target) {
+        int len = nums.length;
+        if(len==0){
+            return new int[]{-1,-1};
+        }
+
+        int firstPosition = searchFirstPosition(nums,target);
+        if(firstPosition == -1){
+            return new int[]{-1,-1};
+        }
+
+        int lastPosition = searchLastPosition(nums,target);
+
+        return new int[]{firstPosition,lastPosition};
+
+    }
+
+    private int searchFirstPosition(int[] nums , int target){
+        int left = 0;
+        int right = nums.length-1;
+
+        while(left < right){
+            int mid = left+(right-left)/2;
+            if(nums[mid]<target){
+                left = mid+1;
+            }else{
+                right = mid;
+            }
+        }
+
+        if(nums[left]==target){
+            return left;
+        }else{
+            return -1;
+        }
+    }
+
+    private int searchLastPosition(int[] nums , int target){
+        int left = 0;
+        int right = nums.length-1;
+
+        while(left < right){
+            int mid = left+(right-left+1)/2;
+            if(nums[mid]>target){
+                right = mid-1;
+            }else{
+                left = mid;
+            }
+        }
+
+        return left;
+    }
+}
+```
+
+
+
+## 153.Find Minimum in Rotated Sorted Array ==medium== [数组] [二分法]
+
+
+
+```java
+//使用二分法，如果nums[mid]<nums[right]说明最小值一定在左半部分，反之，最小值在右半部分
+class Solution {
+    public int findMin(int[] nums) {
+        int left = 0;
+        int right = nums.length - 1;
+
+        while(left<right){
+            int mid =left+(right-left)/2;
+            if(nums[mid]<nums[right]){
+                right = mid;
+            }else{
+                left = mid+1;
+            }
+        }
+
+        return nums[left];
+    }
+}
+```
+
+
+
+## 154.Find Minimum in Rotated Sorted Array II ==hard== [数组] [二分法]
+
+```java
+//与153题类似，只不过nums[mid] = nums[right]时，需要right-1来进行去重
+class Solution {
+    public int findMin(int[] nums) {
+        int left = 0;
+        int right = nums.length - 1;
+
+        while(left<right){
+            int mid = left+(right-left)/2;
+            if(nums[mid]<nums[right]){
+                right = mid;
+            }else if(nums[mid] == nums[right]){
+                right = right-1;
+            }else{
+                left = mid+1;
+            }
+                
+            
+        }
+
+        return nums[left];
+    }
+}
+```
+
