@@ -850,3 +850,102 @@ class Solution {
 }
 ```
 
+
+
+
+
+## 33.Search in Rotated Sorted Array ==Medium== [二分法]
+
+```java
+class Solution {
+    public int search(int[] nums, int target) {
+        //首先使用二分法找到最小值
+        int l = 0;
+        int r = nums.length-1;
+        while(l < r){
+            int mid = l+(r-l)/2;
+            if(nums[mid]>nums[r]){
+                l = mid+1;
+            }else{
+                r = mid;
+            }
+        }
+
+        int left = find(nums,target,0,l);
+        int right = find(nums,target,l,nums.length-1);
+
+        if(left==-1){
+           return right==-1?-1:right;
+        }else{
+            return left;
+        }
+
+
+    }
+
+    public int find(int[] nums,int target,int l,int r){
+        
+
+        while(l<=r){
+            int mid = l+(r-l)/2;
+            if(nums[mid]>target){
+                r = mid-1;
+            }else if(nums[mid]<target){
+                l = mid+1;
+            }else{
+                return mid;
+            }
+        }
+
+        return -1;
+    }
+}
+```
+
+
+
+## 81.Search in Rotated Sorted Array II ==Medium== [二分法]
+
+```java
+class Solution {
+    public boolean search(int[] nums, int t) {
+        int n = nums.length;
+        int l = 0, r = n - 1;
+        // 恢复二段性
+        while (l < r && nums[0] == nums[r]) r--;
+
+        // 第一次二分，找旋转点
+        while (l < r) {
+            int mid = l + r + 1 >> 1;
+            if (nums[mid] >= nums[0]) {
+                l = mid;
+            } else {
+                r = mid - 1;
+            }
+        }
+        
+        int idx = n;
+        if (nums[r] >= nums[0] && r + 1 < n) idx = r + 1;
+
+        // 第二次二分，找目标值
+        int ans = find(nums, 0, idx - 1, t);
+        if (ans != -1) return true;
+        ans = find(nums, idx, n - 1, t);
+        return ans != -1;
+    }
+    int find(int[] nums, int l, int r, int t) {
+        while (l < r) {
+            int mid = l + r >> 1;
+            if (nums[mid] >= t) {
+                r = mid;
+            } else {
+                l = mid + 1;
+            }
+        }
+        return nums[r] == t ? r : -1;
+    }
+}
+
+
+```
+
