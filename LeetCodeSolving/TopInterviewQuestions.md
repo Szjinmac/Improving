@@ -949,3 +949,192 @@ class Solution {
 
 ```
 
+
+
+## 278. First Bad Version  ==Easy== [二分法]
+
+```java
+/* The isBadVersion API is defined in the parent class VersionControl.
+      boolean isBadVersion(int version); */
+
+public class Solution extends VersionControl {
+    public int firstBadVersion(int n) {
+        int left=1; 
+        int right=n;
+        while(left<=right){
+            int mid = left+(right-left)/2;
+            if(isBadVersion(mid)==false){
+                left = mid+1;
+            }else{
+                if(isBadVersion(mid-1)==false){
+                    return mid;
+                }else{
+                    right = mid-1;
+                }
+            }
+        }
+        return left;
+    }
+}
+```
+
+
+
+## 852.Peak Index in a Mountain Array ==Medium== [二分法]
+
+```java
+class Solution {
+    public int peakIndexInMountainArray(int[] arr) {
+        int left = 0;
+        int right = arr.length-1;
+		//注意这里使用排除二分法，left<right
+        
+        while(left<right){
+            int mid = left+(right-left)/2;
+            if(arr[mid]<arr[mid+1]){
+                left = mid+1;
+            }else{
+                right = mid;
+            }
+        }
+
+        return left;
+    }
+}
+```
+
+
+
+## 1095.Find in Mountain Array ==Hard==[二分法]
+
+```java
+/**
+ * // This is MountainArray's API interface.
+ * // You should not implement it, or speculate about its implementation
+ * interface MountainArray {
+ *     public int get(int index) {}
+ *     public int length() {}
+ * }
+ */
+ 
+class Solution {
+    public int findInMountainArray(int target, MountainArray mountainArr) {
+        //首先使用二分法找出最大值
+        int left = 0;
+        int right = mountainArr.length()-1;
+        while(left<right){
+            int mid = left+(right-left)/2;
+
+            if(mountainArr.get(mid)<mountainArr.get(mid+1)){
+                left = mid+1;
+            }else{
+                right = mid;
+            }
+        }
+
+        int max = left;
+        //左边的目标值
+        int leftnum = findtarget(target,mountainArr,0,left);
+        //右边的目标
+        int rightnum = findtargetright(target,mountainArr,left,mountainArr.length()-1);
+
+        if(leftnum==-1){
+            return rightnum==-1?-1:rightnum;
+        }else{
+            return leftnum==-1?-1:leftnum;
+        }
+    }
+
+    public int findtarget(int target,MountainArray mountainArr,int left,int right){
+        while(left<=right){
+            int mid = left+(right-left)/2;
+            if(mountainArr.get(mid)>target){
+                right = mid -1;
+            }else if(mountainArr.get(mid)<target){
+                left = mid+1;
+            }else{
+                return mid;
+            }
+        }
+
+        return -1;
+    }
+
+     public int findtargetright(int target,MountainArray mountainArr,int left,int right){
+        while(left<=right){
+            int mid = left+(right-left)/2;
+            if(mountainArr.get(mid)>target){
+                left  = mid + 1;
+            }else if(mountainArr.get(mid)<target){
+                right = mid - 1;
+            }else{
+                return mid;
+            }
+        }
+
+        return -1;
+    }
+}
+```
+
+
+
+
+
+## 4.Median of Two Sorted Arrays ==Hard== [二分法]不太会
+
+```java
+public class Solution {
+
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        if (nums1.length > nums2.length) {
+            int[] temp = nums1;
+            nums1 = nums2;
+            nums2 = temp;
+        }
+
+        int m = nums1.length;
+        int n = nums2.length;
+
+        // 分割线左边的所有元素需要满足的个数 m + (n - m + 1) / 2;
+        int totalLeft = (m + n + 1) / 2;
+
+        // 在 nums1 的区间 [0, m] 里查找恰当的分割线，
+        // 使得 nums1[i - 1] <= nums2[j] && nums2[j - 1] <= nums1[i]
+        int left = 0;
+        int right = m;
+
+        while (left < right) {
+            int i = left + (right - left + 1) / 2;
+            int j = totalLeft - i;
+            if (nums1[i - 1] > nums2[j]) {
+                // 下一轮搜索的区间 [left, i - 1]
+                right = i - 1;
+            } else {
+                // 下一轮搜索的区间 [i, right]
+                left = i;
+            }
+        }
+
+        int i = left;
+        int j = totalLeft - i;
+
+        int nums1LeftMax = i == 0 ? Integer.MIN_VALUE : nums1[i - 1];
+        int nums1RightMin = i == m ? Integer.MAX_VALUE : nums1[i];
+        int nums2LeftMax = j == 0 ? Integer.MIN_VALUE : nums2[j - 1];
+        int nums2RightMin = j == n ? Integer.MAX_VALUE : nums2[j];
+
+        if (((m + n) % 2) == 1) {
+            return Math.max(nums1LeftMax, nums2LeftMax);
+        } else {
+            return (double) ((Math.max(nums1LeftMax, nums2LeftMax) + Math.min(nums1RightMin, nums2RightMin))) / 2;
+        }
+    }
+}
+
+作者：liweiwei1419
+链接：https://leetcode.cn/problems/median-of-two-sorted-arrays/solutions/15086/he-bing-yi-hou-zhao-gui-bing-guo-cheng-zhong-zhao-/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
