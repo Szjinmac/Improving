@@ -1138,3 +1138,82 @@ public class Solution {
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 
+
+
+## 287. Find the Duplicate Number ==Medium== [二分法]
+
+```java
+class Solution {
+    public int findDuplicate(int[] nums) {
+        int left = 1;
+        int right = nums.length-1;
+
+        while(left < right){
+            int mid = left+(right-left)/2;
+            int count = 0;
+
+            for(int num:nums){
+                if(num<=mid){
+                    count+=1;
+                }
+            }
+
+            if(count>mid){
+                right = mid;
+            }else{
+                left = mid+1;
+            }
+        }
+        return left;
+    }
+}
+```
+
+
+
+## 1300. Sum of Mutated Array Closest to Target ==Medium== [二分法]
+
+
+
+```java
+class Solution {
+    public int findBestValue(int[] arr, int target) {
+        int left = 0;
+        int right = 0;
+        //找到最大值
+        for(int num:arr){
+            right =Math.max(right,num);
+        }
+
+        while(left<right){
+            int mid =left+(right-left)/2;
+            int sum = calculatesum(arr,mid);
+            if(sum<target){
+                left = mid+1;
+            }else{
+                right = mid;
+            }
+        }
+
+        int sum1 = calculatesum(arr,left);
+        int sum2 = calculatesum(arr,left-1);
+        if (target - sum1 <= sum2 - target) {
+            return left - 1;
+        }
+        return left;
+
+
+    }
+
+    private int calculatesum(int[] arr,int value){
+        int sum = 0;
+        for(int num:arr){
+            sum+=Math.min(num,value);
+        }
+
+        return sum;
+    }
+}
+
+```
+
