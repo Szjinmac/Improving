@@ -1257,3 +1257,180 @@ class Solution {
 }
 ```
 
+## 410.Split Array Largest Sum ==hard== [二分法]
+
+```java
+class Solution {
+    public int splitArray(int[] nums, int k) {
+        int max = 0;
+        int sum = 0;
+
+        //子数组各自和的最大值
+        for(int num:nums){
+            max = Math.max(max,num);
+            sum+=num;
+        }
+
+        int left = max;
+        int right = sum;
+
+        while(left<right){
+            int mid = left+(right-left)/2;
+
+            int splits = split(nums,mid);
+            if(splits>k){
+                left = mid+1;
+            }else{
+                right = mid;
+            }
+        }
+
+        return left;
+
+    }
+
+   
+
+    private int split(int[] nums,int maxIntervalSum){
+        int splits = 1;
+        int currentSum = 0;
+        //当前区间的和
+        for(int num:nums){
+            if(currentSum + num>maxIntervalSum){
+                currentSum = 0;
+                splits++;
+            }
+
+            currentSum+=num;
+        }
+
+        return splits;
+    }
+
+    
+
+```
+
+
+
+## 1011.Capacity To Ship Packages Within D Days ==hard== [二分法]
+
+```java
+class Solution {
+    public int shipWithinDays(int[] weights, int days) {
+        int max = 0;
+        int sum = 0;
+
+        for(int weight:weights){
+            max = Math.max(max,weight);
+            sum+=weight;
+        }
+
+        int left = max;
+        int right = sum;
+
+        while(left<right){
+            int mid = left+(right-left)/2;
+            int day = split(weights,mid);
+
+            if(day>days){
+                left = mid+1;
+
+            }else{
+                right = mid;
+            }
+        }
+
+        return left;
+
+    }
+
+    private int split(int[] weights, int max){
+        int days = 1;
+        int currentSum = 0;
+
+        for(int weight:weights){
+            if(currentSum+weight>max){
+                currentSum = 0;
+                days+=1;
+            }
+
+            currentSum+=weight;
+        }
+
+        return days;
+    }
+}
+```
+
+
+
+
+
+## LCP12.小张刷题计划
+
+```java
+class Solution {
+    public int minTime(int[] time, int m) {
+        int left = 0;
+        int right = Integer.MAX_VALUE;
+        while(left <= right) {
+            int mid = left + (right - left) / 2;
+            //如果这个时间限制可以在规定天数里面完成刷题计划
+            if(check(time, mid, m)) {
+                //向左缩小查找范围
+                right = mid - 1;
+            }else {
+                //反之 向右缩小查找范围
+                left = mid + 1;
+            }
+        }
+        return left;
+    }
+
+    boolean check(int[] time, int target, int m) {
+        int maxTime = 0;
+        int total = 0;
+        //如果第一天就都做完了
+        //后续代码不会将days进行递增 应该初始化为1
+        int days = 1;
+        //是否使用过了场外援助
+        boolean helper = true;
+        for(int i = 0; i < time.length; i++) {
+            //维护花费时间最长的题目
+            maxTime = Math.max(maxTime, time[i]);
+            //累加这一天的总做题时间
+            total += time[i];
+            //如果超过当天做题时间限制了
+            if(total > target) {
+                //如果未使用过场外援助
+                if(helper) {
+                    //减去耗时最多的题目
+                    total -= maxTime;
+                    helper = false;
+                }else {
+                    //超时并且使用过场外援助
+                    //得从下一天重新开始了
+                    days++;
+                    //刷新场外援助
+                    helper = true;
+                    //当天最大值刷新
+                    maxTime = 0;
+                    //总计时间刷新
+                    total = 0;
+                    //最重要的一点也很容易遗忘
+                    //这道没有时间做的题目留到下一天重新开始做
+                    i--;
+                }
+            }
+        }
+        return m >= days;
+    }
+}
+
+作者：Paddi-Yan
+链接：https://leetcode.cn/problems/xiao-zhang-shua-ti-ji-hua/solutions/1402270/lcp-12-by-lyyprogrammer-wy2f/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
