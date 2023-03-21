@@ -1217,3 +1217,43 @@ class Solution {
 
 ```
 
+
+
+## 875.Koko Eating Bananas ==Medium== 二分法
+
+```java
+class Solution {
+    public int minEatingSpeed(int[] piles, int h) {
+        //首先找到堆中的最大值
+        int max = 0;
+        for(int num:piles){
+            max = max>num?max:num;
+        }
+
+        int left = 1;
+        int right = max;
+
+        while(left<right){
+            int mid = left+(right-left)/2;
+            int time = 0;
+
+            for(int num:piles){
+                
+                int hour=(mid+num-1)/mid;
+                time +=hour;
+            }
+
+            if(time>h){
+                left=mid+1;
+            }else{
+                right = mid;
+            }
+
+        }
+
+        return left;
+        
+    }
+}
+```
+
